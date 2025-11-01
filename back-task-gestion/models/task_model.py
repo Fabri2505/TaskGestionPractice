@@ -1,6 +1,6 @@
 from datetime import datetime
 import enum
-from sqlalchemy import Boolean, Column, DateTime, Enum, ForeignKey, Integer, String, Text, func
+from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -10,6 +10,11 @@ class EstadoAsignacion(enum.Enum):
     aceptada = "aceptada"
     rechazada = "rechazada"
 
+class EstadoTarea(enum.Enum):
+    completada = "completada"
+    pendiente = "pendiente"
+    en_progreso = "en_progreso"
+
 class Usuario(Base):
     __tablename__ = 'usuarios'
     
@@ -17,7 +22,7 @@ class Usuario(Base):
     nombre = Column(String(100), nullable=False)
     email = Column(String(100), nullable=False, unique=True, index=True)
     contra = Column(String(255), nullable=False)
-    fecha_creacion = Column(DateTime, default=datetime.utcnow, server_default=func.now())
+    fecha_creacion = Column(DateTime, default=datetime.now, server_default=func.now())
     
     # Relaciones
     tareas = relationship('Tarea', back_populates='usuario', cascade='all, delete-orphan')
@@ -47,12 +52,12 @@ class Tarea(Base):
     usuario_id = Column(Integer, ForeignKey('usuarios.id', ondelete='CASCADE'), nullable=False, index=True)
     titulo = Column(String(200), nullable=False)
     descripcion = Column(Text)
-    completada = Column(Boolean, default=False, index=True)
-    fecha_creacion = Column(DateTime, default=datetime.utcnow, server_default=func.now())
+    estado = Column(Enum(EstadoTarea), default=EstadoTarea.pendiente, nullable=False, index=True)
+    fecha_creacion = Column(DateTime, default=datetime.now, server_default=func.now())
     fecha_actualizacion = Column(
         DateTime, 
-        default=datetime.utcnow, 
-        onupdate=datetime.utcnow,
+        default=datetime.now, 
+        onupdate=datetime.now,
         server_default=func.now(),
         server_onupdate=func.now()
     )
@@ -64,7 +69,7 @@ class Tarea(Base):
     compartidas = relationship('TareaCompartida', back_populates='tarea', cascade='all, delete-orphan')
     
     def __repr__(self):
-        return f"<Tarea(id={self.id}, titulo='{self.titulo}', completada={self.completada})>"
+        return f"<Tarea(id={self.id}, titulo='{self.titulo}', estado={self.estado.value})>"
 
 
 class HistorialTarea(Base):
@@ -72,15 +77,14 @@ class HistorialTarea(Base):
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     tarea_id = Column(Integer, ForeignKey('tareas.id', ondelete='CASCADE'), nullable=False, index=True)
-    estado_anterior = Column(Boolean, nullable=False)
-    estado_nuevo = Column(Boolean, nullable=False)
-    fecha_cambio = Column(DateTime, default=datetime.utcnow, server_default=func.now(), index=True)
+    estado_nuevo = Column(Enum(EstadoTarea), nullable=False)
+    fecha_cambio = Column(DateTime, default=datetime.now, server_default=func.now(), index=True)
     
     # Relaciones
     tarea = relationship('Tarea', back_populates='historial')
     
     def __repr__(self):
-        return f"<HistorialTarea(id={self.id}, tarea_id={self.tarea_id}, {self.estado_anterior}->{self.estado_nuevo})>"
+        return f"<HistorialTarea(id={self.id}, tarea_id={self.tarea_id}, Nuevo estado: {self.estado_nuevo})>"
 
 
 class TareaCompartida(Base):
@@ -90,7 +94,7 @@ class TareaCompartida(Base):
     tarea_id = Column(Integer, ForeignKey('tareas.id', ondelete='CASCADE'), nullable=False, index=True)
     usuario_propietario_id = Column(Integer, ForeignKey('usuarios.id', ondelete='CASCADE'), nullable=False, index=True)
     usuario_compartido_id = Column(Integer, ForeignKey('usuarios.id', ondelete='CASCADE'), nullable=False, index=True)
-    fecha_compartida = Column(DateTime, default=datetime.utcnow, server_default=func.now())
+    fecha_compartida = Column(DateTime, default=datetime.now, server_default=func.now())
     
     # Relaciones
     tarea = relationship('Tarea', back_populates='compartidas')
@@ -115,7 +119,7 @@ class AsignacionTarea(Base):
     tarea_id = Column(Integer, ForeignKey('tareas.id', ondelete='CASCADE'), nullable=False, index=True)
     usuario_asignado_id = Column(Integer, ForeignKey('usuarios.id', ondelete='CASCADE'), nullable=False, index=True)
     estado = Column(Enum(EstadoAsignacion), default=EstadoAsignacion.pendiente, nullable=False, index=True)
-    fecha_asignacion = Column(DateTime, default=datetime.utcnow, server_default=func.now())
+    fecha_asignacion = Column(DateTime, default=datetime.now, server_default=func.now())
     fecha_respuesta = Column(DateTime, nullable=True)
     
     # Relaciones
@@ -125,12 +129,12 @@ class AsignacionTarea(Base):
     def aceptar(self):
         """Método para aceptar una asignación"""
         self.estado = EstadoAsignacion.aceptada
-        self.fecha_respuesta = datetime.utcnow()
+        self.fecha_respuesta = datetime.now()
     
     def rechazar(self):
         """Método para rechazar una asignación"""
         self.estado = EstadoAsignacion.rechazada
-        self.fecha_respuesta = datetime.utcnow()
+        self.fecha_respuesta = datetime.now()
     
     def __repr__(self):
         return f"<AsignacionTarea(id={self.id}, tarea_id={self.tarea_id}, usuario={self.usuario_asignado_id}, estado={self.estado.value})>"

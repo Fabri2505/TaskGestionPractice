@@ -3,7 +3,16 @@ from fastapi import APIRouter, Depends, status, HTTPException
 
 from controllers.task_controller import TaskController
 from database import get_db
-from schemas.task import AsignacionResponse, CompartirTarea, TareaCompartidaResponse, TareaCreate, TareaResponse, TareaUpdate
+from models.task_model import EstadoTarea
+from schemas.task import (
+    AsignacionResponse, 
+    CompartirTarea, 
+    TareaCompartidaResponse, 
+    TareaCreate, 
+    TareaResponse, 
+    TareaUpdate,
+    HistorialTareaResponse
+)
 from sqlalchemy.orm import Session
 
 
@@ -61,6 +70,18 @@ async def get_user_tasks(
     return tareas
 
 
+@router.get("/user/{usuario_id}/estado/{estado}", response_model=List[TareaResponse])
+async def get_user_tasks_by_estado(
+    usuario_id: int,
+    estado: EstadoTarea,
+    db: Session = Depends(get_db)
+):
+    """Obtener tareas de un usuario filtradas por estado (pendiente, en_progreso, completada)"""
+    task_ctrl = TaskController(db)
+    tareas = task_ctrl.get_tasks_by_estado(usuario_id, estado)
+    return tareas
+
+
 @router.put("/{tarea_id}", response_model=TareaResponse)
 async def update_task(
     tarea_id: int,
@@ -74,7 +95,7 @@ async def update_task(
         tarea_id=tarea_id,
         titulo=tarea_update.titulo,
         descripcion=tarea_update.descripcion,
-        completada=tarea_update.completada
+        estado=tarea_update.estado
     )
     
     if not tarea:
@@ -103,6 +124,28 @@ async def delete_task(
     return None
 
 
+# ==================== HISTORIAL ====================
+
+@router.get("/{tarea_id}/historial", response_model=List[HistorialTareaResponse])
+async def get_task_history(
+    tarea_id: int,
+    db: Session = Depends(get_db)
+):
+    """Obtener el historial de cambios de estado de una tarea"""
+    task_ctrl = TaskController(db)
+    
+    # Verificar que la tarea existe
+    tarea = task_ctrl.get_task_by_id(tarea_id)
+    if not tarea:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Tarea no encontrada"
+        )
+    
+    historial = task_ctrl.get_task_history(tarea_id)
+    return historial
+
+
 # ==================== ASIGNACIONES ====================
 
 @router.get("/assignments/pending/{usuario_id}", response_model=List[AsignacionResponse])
@@ -113,6 +156,28 @@ async def get_pending_assignments(
     """Obtener asignaciones pendientes de un usuario"""
     task_ctrl = TaskController(db)
     asignaciones = task_ctrl.get_pending_assignments(usuario_id)
+    return asignaciones
+
+
+@router.get("/assignments/rejected/{usuario_id}", response_model=List[AsignacionResponse])
+async def get_rejected_assignments(
+    usuario_id: int,
+    db: Session = Depends(get_db)
+):
+    """Obtener asignaciones rechazadas de un usuario"""
+    task_ctrl = TaskController(db)
+    asignaciones = task_ctrl.get_rejected_assignments(usuario_id)
+    return asignaciones
+
+
+@router.get("/assignments/all/{usuario_id}", response_model=List[AsignacionResponse])
+async def get_all_assignments(
+    usuario_id: int,
+    db: Session = Depends(get_db)
+):
+    """Obtener todas las asignaciones de un usuario (pendientes, aceptadas, rechazadas)"""
+    task_ctrl = TaskController(db)
+    asignaciones = task_ctrl.get_all_assignments(usuario_id)
     return asignaciones
 
 
@@ -192,6 +257,24 @@ async def share_task(
     return tarea_compartida
 
 
+@router.delete("/{tarea_id}/unshare/{usuario_compartido_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def unshare_task(
+    tarea_id: int,
+    usuario_compartido_id: int,
+    db: Session = Depends(get_db)
+):
+    """Dejar de compartir una tarea con un usuario"""
+    task_ctrl = TaskController(db)
+    
+    if not task_ctrl.unshare_task(tarea_id, usuario_compartido_id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No se encontró la tarea compartida"
+        )
+    
+    return None
+
+
 @router.get("/shared/{usuario_id}", response_model=List[TareaResponse])
 async def get_shared_tasks(
     usuario_id: int,
@@ -226,8 +309,9 @@ async def get_all_user_tasks(
                 "id": t.id,
                 "titulo": t.titulo,
                 "descripcion": t.descripcion,
-                "completada": t.completada,
-                "fecha_creacion": t.fecha_creacion
+                "estado": t.estado.value,
+                "fecha_creacion": t.fecha_creacion,
+                "fecha_actualizacion": t.fecha_actualizacion
             } for t in todas_las_tareas["tareas_creadas"]
         ],
         "tareas_aceptadas": [
@@ -235,8 +319,9 @@ async def get_all_user_tasks(
                 "id": t.id,
                 "titulo": t.titulo,
                 "descripcion": t.descripcion,
-                "completada": t.completada,
-                "fecha_creacion": t.fecha_creacion
+                "estado": t.estado.value,
+                "fecha_creacion": t.fecha_creacion,
+                "fecha_actualizacion": t.fecha_actualizacion
             } for t in todas_las_tareas["tareas_aceptadas"]
         ],
         "tareas_compartidas": [
@@ -244,15 +329,18 @@ async def get_all_user_tasks(
                 "id": t.id,
                 "titulo": t.titulo,
                 "descripcion": t.descripcion,
-                "completada": t.completada,
-                "fecha_creacion": t.fecha_creacion
+                "estado": t.estado.value,
+                "fecha_creacion": t.fecha_creacion,
+                "fecha_actualizacion": t.fecha_actualizacion
             } for t in todas_las_tareas["tareas_compartidas"]
         ],
         "asignaciones_pendientes": [
             {
                 "id": a.id,
                 "tarea_id": a.tarea_id,
-                "fecha_asignacion": a.fecha_asignacion
+                "estado": a.estado.value,
+                "fecha_asignacion": a.fecha_asignacion,
+                "fecha_respuesta": a.fecha_respuesta
             } for a in todas_las_tareas["asignaciones_pendientes"]
         ]
     }

@@ -1,6 +1,18 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
+from enum import Enum
+
+# Enums para validación en Pydantic
+class EstadoTareaEnum(str, Enum):
+    pendiente = "pendiente"
+    en_progreso = "en_progreso"
+    completada = "completada"
+
+class EstadoAsignacionEnum(str, Enum):
+    pendiente = "pendiente"
+    aceptada = "aceptada"
+    rechazada = "rechazada"
 
 # Schemas para Tareas
 class TareaCreate(BaseModel):
@@ -11,34 +23,47 @@ class TareaCreate(BaseModel):
 class TareaUpdate(BaseModel):
     titulo: Optional[str] = Field(None, min_length=1, max_length=200)
     descripcion: Optional[str] = None
-    completada: Optional[bool] = None
+    estado: Optional[EstadoTareaEnum] = None
 
 class TareaResponse(BaseModel):
     id: int
     titulo: str
     descripcion: Optional[str]
-    completada: bool
+    estado: EstadoTareaEnum
     fecha_creacion: datetime
     fecha_actualizacion: datetime
     usuario_id: int
     
     class Config:
         from_attributes = True
+        use_enum_values = True
+
+# Schemas para Historial
+class HistorialTareaResponse(BaseModel):
+    id: int
+    tarea_id: int
+    estado_nuevo: EstadoTareaEnum
+    fecha_cambio: datetime
+    
+    class Config:
+        from_attributes = True
+        use_enum_values = True
 
 # Schemas para Asignaciones
 class AsignacionResponse(BaseModel):
     id: int
     tarea_id: int
     usuario_asignado_id: int
-    estado: str
+    estado: EstadoAsignacionEnum
     fecha_asignacion: datetime
     fecha_respuesta: Optional[datetime]
     
     class Config:
         from_attributes = True
+        use_enum_values = True
 
 class TareaConAsignacion(TareaResponse):
-    estado_asignacion: Optional[str] = None
+    estado_asignacion: Optional[EstadoAsignacionEnum] = None
 
 # Schemas para Compartir
 class CompartirTarea(BaseModel):
