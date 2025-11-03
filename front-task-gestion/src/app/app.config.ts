@@ -11,15 +11,16 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset:Aura
+        preset:Aura,
+        options: {
+          darkModeSelector: '.dark-mode', // Clase para activar modo oscuro
+        }
       },
       ripple: true
     }),
-    provideZoneChangeDetection(
-      { 
-        eventCoalescing: true
-      }
-    ), 
+    provideZoneChangeDetection({ 
+      eventCoalescing: true
+    }), 
     provideRouter(routes)
   ]
 };

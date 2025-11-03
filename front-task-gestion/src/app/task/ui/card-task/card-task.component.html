@@ -1,54 +1,70 @@
-<p-card [styleClass]="'shadow-md hover:shadow-lg transition-shadow duration-300 ' + getCardBorderClass()">
-    <div class="flex flex-col gap-3">
-      <!-- Header con título y estado -->
-      <div class="flex justify-between items-start">
-        <h3 class="text-lg font-semibold text-gray-800 flex-1">
-          {{ task.title }}
-        </h3>
+<div class="task-card-wrapper" [attr.data-status]="task.status">
+  <p-card [styleClass]="'task-card ' + getCardClass()">
+    <div class="card-content">
+      <!-- Status indicator bar -->
+      <div class="status-bar" [style.background]="getStatusColor()"></div>
+      
+      <!-- Header -->
+      <div class="card-header">
+        <div class="title-section">
+          <h3 class="task-title">{{ task.title }}</h3>
+          @if (task.priority) {
+            <span class="priority-badge" [attr.data-priority]="task.priority">
+              {{ getPriorityLabel() }}
+            </span>
+          }
+        </div>
         <p-tag 
           [value]="getStatusLabel()" 
           [severity]="getStatusSeverity()"
-          [styleClass]="'ml-2'">
+          [styleClass]="'status-tag'">
         </p-tag>
       </div>
 
-      <!-- Descripción -->
-      <p class="text-gray-600 text-sm">
-        {{ task.description }}
-      </p>
+      <!-- Description -->
+      <p class="task-description">{{ task.description }}</p>
 
-      <!-- Footer con información adicional -->
-      <div class="flex justify-between items-center pt-2 border-t border-gray-200">
-        <div class="text-xs text-gray-500">
-            @if (task.assignedTo) {
-                <span>
-                    <i class="pi pi-user mr-1"></i>
-                    {{ task.assignedTo }}
-                </span>
-            }@else if (task.dueDate) {
-                <span [class.ml-3]="task.assignedTo">
-                    <i class="pi pi-calendar mr-1"></i>
-                    {{ task.dueDate | date:'dd/MM/yyyy' }}
-                </span>
-            }
+      <!-- Footer -->
+      <div class="card-footer">
+        <div class="task-meta">
+          @if (task.assignedTo) {
+            <div class="meta-item">
+              <p-avatar 
+                [label]="getInitials(task.assignedTo)" 
+                size="normal"
+                [styleClass]="'avatar-custom'">
+              </p-avatar>
+              <span class="meta-text">{{ task.assignedTo }}</span>
+            </div>
+          }
+          @if (task.dueDate) {
+            <div class="meta-item" [class.overdue]="isOverdue()">
+              <i class="pi pi-calendar"></i>
+              <span class="meta-text">{{ task.dueDate | date:'dd MMM' }}</span>
+            </div>
+          }
         </div>
         
-        <!-- Botón de acción según el estado -->
-        @if (task.status !== 'completado') {
-            <p-button     
-                [label]="getActionLabel()" 
-                [icon]="getActionIcon()"
-                [severity]="getActionSeverity()"
-                size="small"
-                (onClick)="onStatusChange()">
+        <!-- Action button -->
+        <div class="action-section">
+          @if (task.status !== 'completado') {
+            <p-button 
+              [label]="getActionLabel()" 
+              [icon]="getActionIcon()"
+              [severity]="getActionSeverity()"
+              [rounded]="true"
+              size="small"
+              [styleClass]="'action-button'"
+              (onClick)="onStatusChange()">
             </p-button>
-        }@else {
-            <span class="text-green-600 text-sm">
-                <i class="pi pi-check-circle mr-1"></i>
-                Completada
-            </span>
-        }
-        
+          } @else {
+            <div class="completed-badge">
+              <i class="pi pi-check-circle"></i>
+              <span>Completada</span>
+            </div>
+          }
+        </div>
       </div>
     </div>
   </p-card>
+</div>

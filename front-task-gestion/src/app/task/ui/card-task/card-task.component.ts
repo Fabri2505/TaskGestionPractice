@@ -1,20 +1,34 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
-import { Task } from '../../utils/schema';
-
+import { Task, TaskStatus } from '../../utils/schema';
+import { Avatar } from 'primeng/avatar';
 
 @Component({
   selector: 'app-card-task',
   standalone: true,
-  imports: [CardModule, TagModule, ButtonModule, CommonModule],
+  imports: [CardModule, TagModule, ButtonModule, CommonModule, Avatar],
   templateUrl: './card-task.component.html',
   styleUrl: './card-task.component.css'
 })
 export class CardTaskComponent {
   @Input() task!: Task;
+  @Output() statusChanged = new EventEmitter<{taskId: number, newStatus: TaskStatus}>();
+
+  getCardClass(): string {
+    return `card-${this.task.status}`;
+  }
+
+  getStatusColor(): string {
+    const colors = {
+      'pendiente': '#f59e0b',
+      'en_progreso': '#3b82f6',
+      'completado': '#10b981'
+    };
+    return colors[this.task.status];
+  }
 
   getStatusLabel(): string {
     const labels = {
@@ -34,13 +48,13 @@ export class CardTaskComponent {
     return severities[this.task.status];
   }
 
-  getCardBorderClass(): string {
-    const classes = {
-      'pendiente': 'border-l-4 border-yellow-400',
-      'en_progreso': 'border-l-4 border-blue-400',
-      'completado': 'border-l-4 border-green-400'
+  getPriorityLabel(): string {
+    const labels = {
+      'low': 'Baja',
+      'medium': 'Media',
+      'high': 'Alta'
     };
-    return classes[this.task.status];
+    return this.task.priority ? labels[this.task.priority] : '';
   }
 
   getActionLabel(): string {
@@ -55,9 +69,29 @@ export class CardTaskComponent {
     return this.task.status === 'pendiente' ? 'info' : 'success';
   }
 
+  getInitials(name: string): string {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  }
+
+  isOverdue(): boolean {
+    if (!this.task.dueDate || this.task.status === 'completado') return false;
+    return new Date(this.task.dueDate) < new Date();
+  }
+
   onStatusChange(): void {
-    // Emite el evento o llama al servicio para cambiar el estado
-    console.log('Cambiar estado de:', this.task.status);
+    const statusFlow: Record<TaskStatus, TaskStatus> = {
+      'pendiente': 'en_progreso',
+      'en_progreso': 'completado',
+      'completado': 'completado'
+    };
+    
+    const newStatus = statusFlow[this.task.status];
+    this.statusChanged.emit({ taskId: this.task.id, newStatus });
   }
 
 
