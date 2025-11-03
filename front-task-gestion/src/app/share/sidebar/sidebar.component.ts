@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { BadgeModule } from 'primeng/badge';
@@ -12,7 +12,7 @@ import { AvatarModule } from 'primeng/avatar';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   items: MenuItem[] | undefined;
 
   ngOnInit() {
@@ -21,10 +21,10 @@ export class SidebarComponent {
               separator: true
           },
           {
-              label: 'Documents',
+              label: 'Users',
               items: [
                   {
-                      label: 'New',
+                      label: 'Perfil',
                       icon: 'pi pi-plus',
                       shortcut: '⌘+N'
                   },
@@ -36,27 +36,22 @@ export class SidebarComponent {
               ]
           },
           {
-              label: 'Profile',
+              label: 'Task',
               items: [
                   {
-                      label: 'Settings',
+                      label: 'Historial',
                       icon: 'pi pi-cog',
                       shortcut: '⌘+O'
                   },
                   {
-                      label: 'Messages',
+                      label: 'Gestion',
                       icon: 'pi pi-inbox',
                       badge: '2'
-                  },
-                  {
-                      label: 'Logout',
-                      icon: 'pi pi-sign-out',
-                      shortcut: '⌘+Q'
                   }
               ]
           },
           {
-              separator: true
+              separator: false
           }
       ];
   }
