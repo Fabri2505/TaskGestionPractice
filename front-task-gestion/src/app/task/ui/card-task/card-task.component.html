@@ -1,1 +1,54 @@
-<p>card-task works!</p>
+<p-card [styleClass]="'shadow-md hover:shadow-lg transition-shadow duration-300 ' + getCardBorderClass()">
+    <div class="flex flex-col gap-3">
+      <!-- Header con título y estado -->
+      <div class="flex justify-between items-start">
+        <h3 class="text-lg font-semibold text-gray-800 flex-1">
+          {{ task.title }}
+        </h3>
+        <p-tag 
+          [value]="getStatusLabel()" 
+          [severity]="getStatusSeverity()"
+          [styleClass]="'ml-2'">
+        </p-tag>
+      </div>
+
+      <!-- Descripción -->
+      <p class="text-gray-600 text-sm">
+        {{ task.description }}
+      </p>
+
+      <!-- Footer con información adicional -->
+      <div class="flex justify-between items-center pt-2 border-t border-gray-200">
+        <div class="text-xs text-gray-500">
+            @if (task.assignedTo) {
+                <span>
+                    <i class="pi pi-user mr-1"></i>
+                    {{ task.assignedTo }}
+                </span>
+            }@else if (task.dueDate) {
+                <span [class.ml-3]="task.assignedTo">
+                    <i class="pi pi-calendar mr-1"></i>
+                    {{ task.dueDate | date:'dd/MM/yyyy' }}
+                </span>
+            }
+        </div>
+        
+        <!-- Botón de acción según el estado -->
+        @if (task.status !== 'completado') {
+            <p-button     
+                [label]="getActionLabel()" 
+                [icon]="getActionIcon()"
+                [severity]="getActionSeverity()"
+                size="small"
+                (onClick)="onStatusChange()">
+            </p-button>
+        }@else {
+            <span class="text-green-600 text-sm">
+                <i class="pi pi-check-circle mr-1"></i>
+                Completada
+            </span>
+        }
+        
+      </div>
+    </div>
+  </p-card>

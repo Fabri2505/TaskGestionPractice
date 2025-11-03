@@ -1,1 +1,10 @@
 <p>historial-task works!</p>
+<div class="container mx-auto p-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (task of tasks; track $index) {
+            <app-card-task
+                [task]="task">
+            </app-card-task>
+        }
+    </div>
+</div>
