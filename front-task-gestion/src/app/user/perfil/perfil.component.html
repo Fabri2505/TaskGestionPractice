@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-4 lg:px-6">
     <div class="max-w-4xl mx-auto">
       <!-- Header -->
       <div class="mb-8">
@@ -34,7 +34,7 @@
         </div>
   
         <!-- Contenido principal -->
-        <div class="lg:col-span-2 space-y-6">
+        <div class="lg:col-span-2 flex flex-col space-y-6">
           <!-- Información Personal -->
           <p-card>
             <ng-template pTemplate="header">
@@ -203,7 +203,7 @@
                   <label class="font-medium text-gray-700">Notificaciones por email</label>
                   <p class="text-sm text-gray-600">Recibe actualizaciones en tu correo</p>
                 </div>
-                <p-inputSwitch></p-inputSwitch>
+                <p-inputSwitch [ngModel]="false"></p-inputSwitch>
               </div>
   
               <p-divider></p-divider>
@@ -213,7 +213,7 @@
                   <label class="font-medium text-gray-700">Autenticación de dos factores</label>
                   <p class="text-sm text-gray-600">Agrega una capa extra de seguridad</p>
                 </div>
-                <p-inputSwitch></p-inputSwitch>
+                <p-inputSwitch [ngModel]="false"></p-inputSwitch>
               </div>
   
               <p-divider></p-divider>
