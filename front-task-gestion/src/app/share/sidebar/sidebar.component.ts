@@ -30,13 +30,13 @@ export class SidebarComponent implements OnInit {
           {
             label: 'Perfil',
             icon: 'pi pi-plus',
-            routerLink: '/perfil'
+            routerLink: '/user/perfil'
           },
           {
             label: 'Search',
             icon: 'pi pi-search',
             shortcut: '⌘+S',
-            routerLink: '/search'
+            routerLink: '/user/search'
           }
         ]
       },
