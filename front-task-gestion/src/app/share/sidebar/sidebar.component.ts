@@ -4,55 +4,62 @@ import { MenuModule } from 'primeng/menu';
 import { BadgeModule } from 'primeng/badge';
 import { RippleModule } from 'primeng/ripple';
 import { AvatarModule } from 'primeng/avatar';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [MenuModule, BadgeModule, RippleModule, AvatarModule],
+  imports: [MenuModule, BadgeModule, RippleModule, AvatarModule, RouterModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent implements OnInit {
   items: MenuItem[] | undefined;
 
+  constructor(private router: Router) {}
+
   ngOnInit() {
-      this.items = [
+    this.items = [
+      {
+        separator: true
+      },
+      {
+        label: 'Users',
+        items: [
           {
-              separator: true
+            label: 'Perfil',
+            icon: 'pi pi-plus',
+            routerLink: '/perfil'
           },
           {
-              label: 'Users',
-              items: [
-                  {
-                      label: 'Perfil',
-                      icon: 'pi pi-plus',
-                      shortcut: '⌘+N'
-                  },
-                  {
-                      label: 'Search',
-                      icon: 'pi pi-search',
-                      shortcut: '⌘+S'
-                  }
-              ]
-          },
-          {
-              label: 'Task',
-              items: [
-                  {
-                      label: 'Historial',
-                      icon: 'pi pi-cog',
-                      shortcut: '⌘+O'
-                  },
-                  {
-                      label: 'Gestion',
-                      icon: 'pi pi-inbox',
-                      badge: '2'
-                  }
-              ]
-          },
-          {
-              separator: false
+            label: 'Search',
+            icon: 'pi pi-search',
+            shortcut: '⌘+S',
+            routerLink: '/search'
           }
-      ];
+        ]
+      },
+      {
+        label: 'Task',
+        items: [
+          {
+            label: 'Historial',
+            icon: 'pi pi-cog',
+            shortcut: '⌘+O',
+            routerLink: '/task/historial'
+          },
+          {
+            label: 'Gestion',
+            icon: 'pi pi-inbox',
+            badge: '2',
+            routerLink: '/task/gestion'
+          }
+        ]
+      },
+      {
+        separator: false
+      }
+    ];
   }
 }
