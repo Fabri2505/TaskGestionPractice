@@ -11,6 +11,7 @@ import { MessageModule } from 'primeng/message';
 import { DividerModule } from 'primeng/divider';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { InfoPersonalComponent } from '../ui/info-personal/info-personal.component';
+import { CambioContraComponent } from "../ui/cambio-contra/cambio-contra.component";
 
 @Component({
   selector: 'app-perfil',
@@ -27,8 +28,9 @@ import { InfoPersonalComponent } from '../ui/info-personal/info-personal.compone
     AvatarModule,
     MessageModule,
     DividerModule,
-    InputSwitchModule
-  ],
+    InputSwitchModule,
+    CambioContraComponent
+],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.css'
 })

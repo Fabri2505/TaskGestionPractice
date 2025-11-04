@@ -38,76 +38,7 @@
           <!-- Información Personal -->
           <app-info-personal></app-info-personal>
   
-          <!-- Cambiar Contraseña -->
-          <p-card>
-            <ng-template pTemplate="header">
-              <div class="p-4 border-b">
-                <h2 class="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                  <i class="pi pi-lock"></i>
-                  Seguridad
-                </h2>
-              </div>
-            </ng-template>
-  
-            <div class="space-y-4">
-              <div class="flex flex-col gap-2">
-                <label for="password-actual" class="font-medium text-gray-700">Contraseña actual</label>
-                <p-password 
-                  inputId="password-actual"
-                  [toggleMask]="true"
-                  [feedback]="false"
-                  styleClass="w-full"
-                  inputStyleClass="w-full">
-                </p-password>
-              </div>
-  
-              <div class="flex flex-col gap-2">
-                <label for="password-nueva" class="font-medium text-gray-700">Nueva contraseña</label>
-                <p-password 
-                  inputId="password-nueva"
-                  [toggleMask]="true"
-                  styleClass="w-full"
-                  inputStyleClass="w-full"
-                  promptLabel="Ingresa tu contraseña"
-                  weakLabel="Débil"
-                  mediumLabel="Media"
-                  strongLabel="Fuerte">
-                </p-password>
-              </div>
-  
-              <div class="flex flex-col gap-2">
-                <label for="password-confirmar" class="font-medium text-gray-700">Confirmar nueva contraseña</label>
-                <p-password 
-                  inputId="password-confirmar"
-                  [toggleMask]="true"
-                  [feedback]="false"
-                  styleClass="w-full"
-                  inputStyleClass="w-full">
-                </p-password>
-              </div>
-  
-              <p-message 
-                severity="info" 
-                text="La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números."
-                styleClass="w-full">
-              </p-message>
-            </div>
-  
-            <ng-template pTemplate="footer">
-              <div class="flex justify-end gap-2 pt-4">
-                <p-button 
-                  label="Cancelar" 
-                  severity="secondary"
-                  [outlined]="true">
-                </p-button>
-                <p-button 
-                  label="Cambiar contraseña" 
-                  icon="pi pi-shield"
-                  severity="warn">
-                </p-button>
-              </div>
-            </ng-template>
-          </p-card>
+          <app-cambio-contra></app-cambio-contra>
   
           <!-- Preferencias -->
           <p-card>
