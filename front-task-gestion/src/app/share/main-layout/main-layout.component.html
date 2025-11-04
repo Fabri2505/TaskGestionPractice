@@ -1,1 +1,11 @@
-<p>main-layout works!</p>
+<div class="flex">
+    <!-- Sidebar fijo -->
+    <aside class="w-60 max-h-screen overflow-y-auto">
+      <app-sidebar></app-sidebar>
+    </aside>
+    
+    <!-- Contenido principal -->
+    <main class="flex-1 overflow-y-auto p-4">
+      <router-outlet />
+    </main>
+</div>
