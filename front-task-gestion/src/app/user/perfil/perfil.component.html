@@ -1,1 +1,233 @@
-<p>perfil works!</p>
+<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Mi Perfil</h1>
+        <p class="mt-2 text-gray-600">Administra tu información personal y configuración de seguridad</p>
+      </div>
+  
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Sidebar con avatar -->
+        <div class="lg:col-span-1">
+          <p-card styleClass="h-full">
+            <div class="flex flex-col items-center text-center">
+              <p-avatar 
+                label="JD" 
+                size="xlarge" 
+                shape="circle"
+                styleClass="mb-4"
+                [style]="{'width': '120px', 'height': '120px', 'font-size': '3rem', 'background-color': '#6366f1', 'color': '#ffffff'}">
+              </p-avatar>
+              
+              <h3 class="text-xl font-semibold text-gray-900 mb-1">John Doe</h3>
+              <p class="text-gray-600 mb-4">john.doe&#64;ejemplo.com</p>
+              
+              <p-button 
+                label="Cambiar foto" 
+                icon="pi pi-camera" 
+                severity="secondary"
+                [outlined]="true"
+                styleClass="w-full">
+              </p-button>
+            </div>
+          </p-card>
+        </div>
+  
+        <!-- Contenido principal -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Información Personal -->
+          <p-card>
+            <ng-template pTemplate="header">
+              <div class="p-4 border-b">
+                <h2 class="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                  <i class="pi pi-user"></i>
+                  Información Personal
+                </h2>
+              </div>
+            </ng-template>
+  
+            <div class="space-y-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                  <label for="nombre" class="font-medium text-gray-700">Nombre</label>
+                  <input 
+                    id="nombre" 
+                    type="text" 
+                    pInputText 
+                    value="John"
+                    class="w-full" />
+                </div>
+  
+                <div class="flex flex-col gap-2">
+                  <label for="apellido" class="font-medium text-gray-700">Apellido</label>
+                  <input 
+                    id="apellido" 
+                    type="text" 
+                    pInputText 
+                    value="Doe"
+                    class="w-full" />
+                </div>
+              </div>
+  
+              <div class="flex flex-col gap-2">
+                <label for="email" class="font-medium text-gray-700">Correo electrónico</label>
+                <input 
+                  id="email" 
+                  type="email" 
+                  pInputText 
+                  value="john.doe&#64;ejemplo.com"
+                  class="w-full" />
+              </div>
+  
+              <div class="flex flex-col gap-2">
+                <label for="telefono" class="font-medium text-gray-700">Teléfono</label>
+                <input 
+                  id="telefono" 
+                  type="tel" 
+                  pInputText 
+                  value="+51 999 999 999"
+                  class="w-full" />
+              </div>
+  
+              <div class="flex flex-col gap-2">
+                <label for="bio" class="font-medium text-gray-700">Biografía</label>
+                <textarea 
+                  id="bio" 
+                  rows="3" 
+                  pInputTextarea 
+                  class="w-full"
+                  placeholder="Cuéntanos algo sobre ti..."></textarea>
+              </div>
+            </div>
+  
+            <ng-template pTemplate="footer">
+              <div class="flex justify-end gap-2 pt-4">
+                <p-button 
+                  label="Cancelar" 
+                  severity="secondary"
+                  [outlined]="true">
+                </p-button>
+                <p-button 
+                  label="Guardar cambios" 
+                  icon="pi pi-check">
+                </p-button>
+              </div>
+            </ng-template>
+          </p-card>
+  
+          <!-- Cambiar Contraseña -->
+          <p-card>
+            <ng-template pTemplate="header">
+              <div class="p-4 border-b">
+                <h2 class="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                  <i class="pi pi-lock"></i>
+                  Seguridad
+                </h2>
+              </div>
+            </ng-template>
+  
+            <div class="space-y-4">
+              <div class="flex flex-col gap-2">
+                <label for="password-actual" class="font-medium text-gray-700">Contraseña actual</label>
+                <p-password 
+                  inputId="password-actual"
+                  [toggleMask]="true"
+                  [feedback]="false"
+                  styleClass="w-full"
+                  inputStyleClass="w-full">
+                </p-password>
+              </div>
+  
+              <div class="flex flex-col gap-2">
+                <label for="password-nueva" class="font-medium text-gray-700">Nueva contraseña</label>
+                <p-password 
+                  inputId="password-nueva"
+                  [toggleMask]="true"
+                  styleClass="w-full"
+                  inputStyleClass="w-full"
+                  promptLabel="Ingresa tu contraseña"
+                  weakLabel="Débil"
+                  mediumLabel="Media"
+                  strongLabel="Fuerte">
+                </p-password>
+              </div>
+  
+              <div class="flex flex-col gap-2">
+                <label for="password-confirmar" class="font-medium text-gray-700">Confirmar nueva contraseña</label>
+                <p-password 
+                  inputId="password-confirmar"
+                  [toggleMask]="true"
+                  [feedback]="false"
+                  styleClass="w-full"
+                  inputStyleClass="w-full">
+                </p-password>
+              </div>
+  
+              <p-message 
+                severity="info" 
+                text="La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números."
+                styleClass="w-full">
+              </p-message>
+            </div>
+  
+            <ng-template pTemplate="footer">
+              <div class="flex justify-end gap-2 pt-4">
+                <p-button 
+                  label="Cancelar" 
+                  severity="secondary"
+                  [outlined]="true">
+                </p-button>
+                <p-button 
+                  label="Cambiar contraseña" 
+                  icon="pi pi-shield"
+                  severity="warn">
+                </p-button>
+              </div>
+            </ng-template>
+          </p-card>
+  
+          <!-- Preferencias -->
+          <p-card>
+            <ng-template pTemplate="header">
+              <div class="p-4 border-b">
+                <h2 class="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                  <i class="pi pi-cog"></i>
+                  Preferencias
+                </h2>
+              </div>
+            </ng-template>
+  
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="font-medium text-gray-700">Notificaciones por email</label>
+                  <p class="text-sm text-gray-600">Recibe actualizaciones en tu correo</p>
+                </div>
+                <p-inputSwitch></p-inputSwitch>
+              </div>
+  
+              <p-divider></p-divider>
+  
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="font-medium text-gray-700">Autenticación de dos factores</label>
+                  <p class="text-sm text-gray-600">Agrega una capa extra de seguridad</p>
+                </div>
+                <p-inputSwitch></p-inputSwitch>
+              </div>
+  
+              <p-divider></p-divider>
+  
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="font-medium text-gray-700">Perfil público</label>
+                  <p class="text-sm text-gray-600">Permite que otros usuarios vean tu perfil</p>
+                </div>
+                <p-inputSwitch [ngModel]="true"></p-inputSwitch>
+              </div>
+            </div>
+          </p-card>
+        </div>
+      </div>
+    </div>
+  </div>
