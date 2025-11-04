@@ -10,11 +10,13 @@ import { AvatarModule } from 'primeng/avatar';
 import { MessageModule } from 'primeng/message';
 import { DividerModule } from 'primeng/divider';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { InfoPersonalComponent } from '../ui/info-personal/info-personal.component';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
   imports: [
+    InfoPersonalComponent,
     CommonModule,
     FormsModule,
     CardModule,
