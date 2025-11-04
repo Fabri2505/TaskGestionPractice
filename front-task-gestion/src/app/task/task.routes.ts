@@ -4,5 +4,9 @@ export const routes: Routes = [
     {
         path: '',
         loadComponent: () => import('./historial-task/historial-task.component').then(m => m.HistorialTaskComponent)
+    },
+    {
+        path: 'gestion',
+        loadComponent: () => import('./gestion-task/gestion-task.component').then(m => m.GestionTaskComponent)
     }
 ];
