@@ -1,0 +1,22 @@
+/* Animación suave de entrada */
+@import "primeicons/primeicons.css";
+:host {
+    display: block;
+  }
+  
+  /* Hover en botones */
+  :host ::ng-deep .p-button {
+    transition: all 0.3s ease;
+  }
+  
+  :host ::ng-deep .p-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 140px !important;
+    }
+  }
