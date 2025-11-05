@@ -7,7 +7,7 @@ app_configs = {"title": "PRUEBA-FASTAPI", "version": "0.0.0.1"}
 app = FastAPI(**app_configs)
 
 # Lista de orÃ­genes permitidos
-origins = ["*"]
+origins = ["http://localhost", "http://localhost:4200", "http://example.com"]
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,6 +1,6 @@
 from datetime import datetime
 import enum
-from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, Text, func
+from sqlalchemy import Boolean, Column, DateTime, Enum, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -23,6 +23,7 @@ class Usuario(Base):
     email = Column(String(100), nullable=False, unique=True, index=True)
     contra = Column(String(255), nullable=False)
     fecha_creacion = Column(DateTime, default=datetime.now, server_default=func.now())
+    estado = Column(Boolean, default='True', nullable=False)
     
     # Relaciones
     tareas = relationship('Tarea', back_populates='usuario', cascade='all, delete-orphan')

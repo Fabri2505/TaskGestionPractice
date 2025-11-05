@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -11,15 +11,8 @@ import { AvatarModule } from 'primeng/avatar';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ScrollerModule } from 'primeng/scroller';
 import { CardModule } from 'primeng/card';
-
-interface Usuario {
-  id: number;
-  codigo: string;
-  nombre: string;
-  email: string;
-  departamento: string;
-  estado: 'activo' | 'inactivo';
-}
+import { Usuario } from '../utils/schemas';
+import { SearchService } from '../data-access/search.service';
 
 @Component({
   selector: 'app-search',
@@ -48,6 +41,8 @@ export class SearchComponent {
   searchTerm: string = '';
   loading: boolean = false;
 
+  private serchServ = inject(SearchService);
+
   ngOnInit() {
     // Simular carga de datos
     this.loadUsers();
@@ -58,27 +53,10 @@ export class SearchComponent {
     
     // Simulamos una carga asíncrona con más usuarios para demostrar el virtual scroll
     setTimeout(() => {
-      this.usuarios = this.generateMockUsers(50);
+      this.usuarios = [];
       this.usuariosFiltrados = [...this.usuarios];
       this.loading = false;
     }, 500);
-  }
-
-  generateMockUsers(count: number): Usuario[] {
-    const nombres = ['Juan', 'María', 'Carlos', 'Ana', 'Roberto', 'Laura', 'Pedro', 'Carmen', 'José', 'Isabel'];
-    const apellidos = ['Pérez', 'García', 'López', 'Martínez', 'Sánchez', 'Rodríguez', 'Fernández', 'González', 'Díaz', 'Torres'];
-    const departamentos = ['Desarrollo', 'Marketing', 'Ventas', 'Recursos Humanos', 'Finanzas', 'Operaciones', 'Soporte', 'Diseño'];
-    const estados: ('activo' | 'inactivo')[] = ['activo', 'inactivo'];
-
-    return Array.from({ length: count }, (_, i) => ({
-      id: i + 1,
-      codigo: `USR${String(i + 1).padStart(3, '0')}`,
-      nombre: `${nombres[i % nombres.length]} ${apellidos[(i + 3) % apellidos.length]}`,
-      email: `usuario${i + 1}@empresa.com`,
-      departamento: departamentos[i % departamentos.length],
-      estado: i % 5 === 0 ? estados[1] : estados[0],
-      avatar: this.getInitials(`${nombres[i % nombres.length]} ${apellidos[(i + 3) % apellidos.length]}`)
-    }));
   }
 
   getInitials(nombre: string): string {
@@ -98,10 +76,23 @@ export class SearchComponent {
     }
 
     const termino = this.searchTerm.toLowerCase().trim();
-    this.usuariosFiltrados = this.usuarios.filter(usuario =>
-      usuario.nombre.toLowerCase().includes(termino) ||
-      usuario.codigo.toLowerCase().includes(termino)
-    );
+
+    this.serchServ.searchUsers(termino, 'nombre').subscribe({
+      next: (resultados) => {
+
+        this.usuariosFiltrados = resultados.map(usuario => {
+          return {
+            ...usuario,
+            codigo:`USR${String(usuario.id).padStart(3, '0')}`,
+            avatar: this.getInitials(usuario.nombre)
+          } as Usuario;
+        });
+
+      },
+      error: (error) => {
+        console.error('Error al buscar usuarios:', error);
+      }
+    });
   }
 
   adjuntarTarea(usuario: Usuario, event: Event) {
