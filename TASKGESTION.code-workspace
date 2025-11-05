@@ -1,0 +1,15 @@
+{
+    "folders": [
+      {
+        "path": "front-task-gestion"
+      },
+      {
+        "path": "back-task-gestion"
+      }
+    ],
+    "settings": {
+      // Configuraciones específicas del workspace
+      "typescript.tsdk": "node_modules/typescript/lib",
+      "angular.enable-experimental-ivy-prompt": false
+    }
+  }
