@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from database import get_db
 from controllers.user_controller import UserController
-from schemas.user import UserRegister
+from schemas.user import UserFilter, UserRegister
 from sqlalchemy.orm import Session
 from dependencias import pwd_context
 from services.user_service import UserService
@@ -43,7 +43,7 @@ async def register(user_register:UserRegister, db:Session=Depends(get_db)):
     return {"message": "User registered successfully"}
 
 @router.get("/users")
-def get_users(filtro:str="", db:Session=Depends(get_db)):
+def get_users(filtro:str, tipo_busqueda:UserFilter ,db:Session=Depends(get_db)):
     user_ctrl = UserController(db)
-    users = user_ctrl.get_all_users_by_filter(filtro)
+    users = user_ctrl.get_all_users_by_filter(filtro, tipo_busqueda)
     return {"users": [{"id": user.id, "nombre": user.nombre, "email": user.email} for user in users]}

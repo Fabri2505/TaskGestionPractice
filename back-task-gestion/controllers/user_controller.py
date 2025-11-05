@@ -1,6 +1,7 @@
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from models.task_model import Usuario
+from schemas.user import UserFilter
 
 class UserController:
 
@@ -22,14 +23,15 @@ class UserController:
     def get_user_by_email(self, email:str):
         return self.DB_TASK.query(Usuario).filter(Usuario.email == email).first()
     
-    def get_all_users_by_filter(self, filtro:str):
+    def get_all_users_by_filter(self, filtro:str, tipo_busqueda:UserFilter):
         filtro_like = f"%{filtro}%"
-        return self.DB_TASK.query(Usuario).filter(
-            or_(
-                Usuario.nombre.ilike(filtro_like),
-                Usuario.email.ilike(filtro_like),
+        if tipo_busqueda.value == "id":
+            return self.DB_TASK.query(Usuario).filter(
                 Usuario.id.ilike(filtro_like)
-            )
-        ).all()
+            ).all()
+        elif tipo_busqueda.value == "nombre":
+            return self.DB_TASK.query(Usuario).filter(
+                Usuario.nombre.ilike(filtro_like)
+            ).all()
     
     
