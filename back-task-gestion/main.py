@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from api.routes import router as api_router
 
-app_configs = {"title": "PRUEBA-FASTAPI", "version": "0.0.0.1"}
+app_configs = {"title": "TASK-REAL-TIME", "version": "0.0.0.1"}
 app = FastAPI(**app_configs)
 
 # Lista de orÃ­genes permitidos

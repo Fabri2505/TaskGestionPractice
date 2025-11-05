@@ -10,3 +10,7 @@ class UserRegister(BaseModel):
 class UserFilter(Enum):
     nombre = "nombre"
     id = "id"
+
+class UserChangePassword(BaseModel):
+    old_password: str
+    new_password: str

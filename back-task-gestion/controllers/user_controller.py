@@ -22,6 +22,9 @@ class UserController:
     
     def get_user_by_email(self, email:str):
         return self.DB_TASK.query(Usuario).filter(Usuario.email == email).first()
+
+    def get_user_by_id(self, user_id:int):
+        return self.DB_TASK.query(Usuario).filter(Usuario.id == user_id).first()
     
     def get_all_users_by_filter(self, filtro:str, tipo_busqueda:UserFilter):
         filtro_like = f"%{filtro}%"
@@ -34,4 +37,11 @@ class UserController:
                 Usuario.nombre.ilike(filtro_like)
             ).all()
     
+    def change_password(self, user_id:int, new_hashed_password:str):
+        user = self.DB_TASK.query(Usuario).filter(Usuario.id == user_id).first()
+        if user:
+            user.contra = new_hashed_password
+            self.DB_TASK.flush()
+            return user
+        return None
     

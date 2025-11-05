@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from database import get_db
 from controllers.user_controller import UserController
-from schemas.user import UserFilter, UserRegister
+from schemas.user import UserChangePassword, UserFilter, UserRegister
 from sqlalchemy.orm import Session
 from dependencias import pwd_context
 from services.user_service import UserService
@@ -47,3 +47,18 @@ def get_users(filtro:str, tipo_busqueda:UserFilter ,db:Session=Depends(get_db)):
     user_ctrl = UserController(db)
     users = user_ctrl.get_all_users_by_filter(filtro, tipo_busqueda)
     return [{"id": user.id, "nombre": user.nombre, "email": user.email, "estado": 'activo' if user.estado else 'inactivo'} for user in users]
+
+@router.put("/change-password/{user_id}")
+def change_password(user_id:int, change_obj:UserChangePassword, db:Session=Depends(get_db)):
+    user_ctrl = UserController(db)
+    user_serv = UserService(pwd_context)
+
+    user = user_ctrl.get_user_by_id(user_id)
+    if not user or not user_serv.verify_token_bcrypt_fixed(change_obj.old_password, user.contra):
+        raise HTTPException(status_code=400, detail="Invalid credentials")
+
+    hashed_password = user_serv.hash_token_bcrypt_fixed(change_obj.new_password)
+    user_ctrl.change_password(user_id, hashed_password)
+
+    db.commit()
+    return {"message": "Password updated successfully"}
