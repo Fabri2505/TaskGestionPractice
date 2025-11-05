@@ -1,1 +1,40 @@
-<p>preferencia works!</p>
+<!-- Preferencias -->
+<p-card>
+	<ng-template pTemplate="header">
+		<div class="p-4 border-b">
+			<h2 class="text-xl font-semibold text-gray-900 flex items-center gap-2">
+				<i class="pi pi-cog"></i>
+				Preferencias
+			</h2>
+		</div>
+	</ng-template>
+
+	<div class="space-y-4">
+		<div class="flex items-center justify-between">
+			<div>
+				<label class="font-medium text-gray-700">Notificaciones por email</label>
+				<p class="text-sm text-gray-600">Recibe actualizaciones en tu correo</p>
+			</div>
+			<p-inputSwitch [ngModel]="false"></p-inputSwitch>
+		</div>
+		<p-divider></p-divider>
+
+		<div class="flex items-center justify-between">
+		<div>
+			<label class="font-medium text-gray-700">Autenticación de dos factores</label>
+			<p class="text-sm text-gray-600">Agrega una capa extra de seguridad</p>
+		</div>
+			<p-inputSwitch [ngModel]="false"></p-inputSwitch>
+		</div>
+
+		<p-divider></p-divider>
+
+		<div class="flex items-center justify-between">
+		<div>
+				<label class="font-medium text-gray-700">Perfil público</label>
+				<p class="text-sm text-gray-600">Permite que otros usuarios vean tu perfil</p>
+		</div>
+		<p-inputSwitch [ngModel]="true"></p-inputSwitch>
+		</div>
+	</div>
+</p-card>
