@@ -1,0 +1,22 @@
+/* Estilos personalizados si son necesarios */
+:host ::ng-deep {
+  /* Personalizar tabla de PrimeNG si es necesario */
+  .p-datatable .p-datatable-thead > tr > th {
+    padding: 1rem;
+  }
+
+  .p-datatable .p-datatable-tbody > tr > td {
+    padding: 1rem;
+  }
+
+  /* Personalizar input de búsqueda */
+  .p-inputtext {
+    padding: 0.75rem 1rem;
+    padding-left: 2.5rem;
+  }
+
+  /* Personalizar tooltips */
+  .p-tooltip .p-tooltip-text {
+    font-size: 0.875rem;
+  }
+}
