@@ -41,3 +41,9 @@ async def register(user_register:UserRegister, db:Session=Depends(get_db)):
 
     db.commit()
     return {"message": "User registered successfully"}
+
+@router.get("/users")
+def get_users(filtro:str="", db:Session=Depends(get_db)):
+    user_ctrl = UserController(db)
+    users = user_ctrl.get_all_users_by_filter(filtro)
+    return {"users": [{"id": user.id, "nombre": user.nombre, "email": user.email} for user in users]}

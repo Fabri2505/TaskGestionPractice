@@ -1,3 +1,4 @@
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from models.task_model import Usuario
 
@@ -20,5 +21,15 @@ class UserController:
     
     def get_user_by_email(self, email:str):
         return self.DB_TASK.query(Usuario).filter(Usuario.email == email).first()
+    
+    def get_all_users_by_filter(self, filtro:str):
+        filtro_like = f"%{filtro}%"
+        return self.DB_TASK.query(Usuario).filter(
+            or_(
+                Usuario.nombre.ilike(filtro_like),
+                Usuario.email.ilike(filtro_like),
+                Usuario.id.ilike(filtro_like)
+            )
+        ).all()
     
     
