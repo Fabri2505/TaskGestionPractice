@@ -15,7 +15,8 @@
         <!-- Contenido principal -->
         <div class="lg:col-span-2 flex flex-col space-y-6">
           <app-info-personal></app-info-personal>
-          <app-cambio-contra></app-cambio-contra>
+          <p-toast></p-toast>
+          <app-cambio-contra (passwordChanged)="passwordChanged($event)"></app-cambio-contra>
           <app-preferencia></app-preferencia>
         </div>
       </div>

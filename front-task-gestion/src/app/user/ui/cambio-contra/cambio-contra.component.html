@@ -10,12 +10,22 @@
     </ng-template>
 
     <div class="space-y-4">
+      <!-- Mensaje de error -->
+      @if (showError) {
+        <p-message 
+          severity="error" 
+          [text]="errorMessage"
+          styleClass="w-full">
+        </p-message>
+      }
+      
       <div class="flex flex-col gap-2">
         <label for="password-actual" class="font-medium text-gray-700">Contraseña actual</label>
         <p-password 
           inputId="password-actual"
+          [(ngModel)]="oldContra"
           [toggleMask]="true"
-          [feedback]="false"
+          [feedback]="false"  
           styleClass="w-full"
           inputStyleClass="w-full">
         </p-password>
@@ -26,6 +36,7 @@
         <p-password 
           inputId="password-nueva"
           [toggleMask]="true"
+          [(ngModel)]="newContra"
           styleClass="w-full"
           inputStyleClass="w-full"
           promptLabel="Ingresa tu contraseña"
@@ -39,11 +50,21 @@
         <label for="password-confirmar" class="font-medium text-gray-700">Confirmar nueva contraseña</label>
         <p-password 
           inputId="password-confirmar"
+          [(ngModel)]="confirmContra"
           [toggleMask]="true"
           [feedback]="false"
           styleClass="w-full"
           inputStyleClass="w-full">
         </p-password>
+
+        <!-- Indicador visual de coincidencia -->
+        @if (newContra && confirmContra) {
+          <small [class]="newContra === confirmContra ? 'text-green-600' : 'text-red-600'">
+            <i [class]="newContra === confirmContra ? 'pi pi-check' : 'pi pi-times'"></i>
+            {{ newContra === confirmContra ? 'Las contraseñas coinciden' : 'Las contraseñas no coinciden' }}
+          </small>
+        }
+        
       </div>
 
       <p-message 
@@ -63,7 +84,8 @@
         <p-button 
           label="Cambiar contraseña" 
           icon="pi pi-shield"
-          severity="warn">
+          severity="warn"
+          (onClick)="sendPasswordChange()">
         </p-button>
       </div>
     </ng-template>
