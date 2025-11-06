@@ -9,10 +9,10 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { AvatarModule } from 'primeng/avatar';
 import { SkeletonModule } from 'primeng/skeleton';
-import { ScrollerModule } from 'primeng/scroller';
 import { CardModule } from 'primeng/card';
 import { Usuario } from '../utils/schemas';
 import { SearchService } from '../data-access/search.service';
+import { VscrollCardSearchComponent } from '../ui/vscroll-card-search/vscroll-card-search.component';
 
 @Component({
   selector: 'app-search',
@@ -23,14 +23,13 @@ import { SearchService } from '../data-access/search.service';
     InputTextModule,
     ButtonModule,
     CardModule,
-    ScrollerModule,
     IconFieldModule,
     InputIconModule,
     TooltipModule,
     TagModule,
     AvatarModule,
-    SkeletonModule
-
+    SkeletonModule,
+    VscrollCardSearchComponent
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
@@ -95,38 +94,9 @@ export class SearchComponent {
     });
   }
 
-  adjuntarTarea(usuario: Usuario, event: Event) {
-    event.stopPropagation();
-    console.log('Adjuntar tarea a:', usuario);
-    // Aquí implementarías la lógica para adjuntar una tarea
-  }
-
-  compartirTarea(usuario: Usuario, event: Event) {
-    event.stopPropagation();
-    console.log('Compartir tarea con:', usuario);
-    // Aquí implementarías la lógica para compartir una tarea
-  }
-
   limpiarBusqueda() {
     this.searchTerm = '';
     this.usuariosFiltrados = [...this.usuarios];
   }
 
-  getSeverity(estado: string): 'success' | 'danger' {
-    return estado === 'activo' ? 'success' : 'danger';
-  }
-
-  getAvatarColor(index: number): string {
-    const colors = [
-      'bg-blue-500',
-      'bg-green-500',
-      'bg-purple-500',
-      'bg-pink-500',
-      'bg-indigo-500',
-      'bg-yellow-500',
-      'bg-red-500',
-      'bg-teal-500'
-    ];
-    return colors[index % colors.length];
-  }
 }
