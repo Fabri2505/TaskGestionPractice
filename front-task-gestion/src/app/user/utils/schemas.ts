@@ -9,3 +9,9 @@ export interface Usuario extends UsuarioApiResponse{
     codigo: string;
     avatar: string;
 }
+
+export interface ChangePasswordRequest{
+    userId: number;
+    old_password: string;
+    new_password:    string;
+}
