@@ -1,0 +1,31 @@
+<!-- Barra de búsqueda -->
+<div class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-6">
+    <div class="flex gap-3 items-center">
+        <p-iconfield class="flex-1">
+        <p-inputicon styleClass="pi pi-search" />
+        <input pInputText
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="emitirTermino()"
+            placeholder="Buscar por nombre o código..."
+            class="w-full"
+        />
+        </p-iconfield>
+        @if (searchTerm) {
+            <p-button icon="pi pi-times"
+            [text]="true"
+            severity="secondary"
+            (onClick)="limpiarBusqueda()"
+            pTooltip="Limpiar búsqueda"
+            tooltipPosition="top"
+            />
+        }
+        
+    </div>
+
+    <!-- Resultados contador -->
+    <div class="mt-4 text-sm text-gray-600">
+        <span class="font-semibold">{{ cantUser }}</span> 
+        {{ cantUser === 1 ? 'usuario encontrado' : 'usuarios encontrados' }}
+    </div>
+</div>

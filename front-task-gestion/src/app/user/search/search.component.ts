@@ -13,6 +13,7 @@ import { CardModule } from 'primeng/card';
 import { Usuario } from '../utils/schemas';
 import { SearchService } from '../data-access/search.service';
 import { VscrollCardSearchComponent } from '../ui/vscroll-card-search/vscroll-card-search.component';
+import { SearchBarComponent } from "../ui/search-bar/search-bar.component";
 
 @Component({
   selector: 'app-search',
@@ -29,34 +30,18 @@ import { VscrollCardSearchComponent } from '../ui/vscroll-card-search/vscroll-ca
     TagModule,
     AvatarModule,
     SkeletonModule,
-    VscrollCardSearchComponent
-  ],
+    VscrollCardSearchComponent,
+    SearchBarComponent
+],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
 })
 export class SearchComponent {
   usuarios: Usuario[] = [];
-  usuariosFiltrados: Usuario[] = [];
   searchTerm: string = '';
   loading: boolean = false;
 
   private serchServ = inject(SearchService);
-
-  ngOnInit() {
-    // Simular carga de datos
-    this.loadUsers();
-  }
-
-  loadUsers() {
-    this.loading = true;
-    
-    // Simulamos una carga asíncrona con más usuarios para demostrar el virtual scroll
-    setTimeout(() => {
-      this.usuarios = [];
-      this.usuariosFiltrados = [...this.usuarios];
-      this.loading = false;
-    }, 500);
-  }
 
   getInitials(nombre: string): string {
     return nombre
@@ -68,35 +53,30 @@ export class SearchComponent {
   }
 
 
-  buscarUsuarios() {
-    if (!this.searchTerm.trim()) {
-      this.usuariosFiltrados = [...this.usuarios];
+  buscarUsuarios(termino:string) {
+    if (!termino) {
+      this.usuarios = [];
       return;
     }
 
-    const termino = this.searchTerm.toLowerCase().trim();
-
+    this.loading = true;
     this.serchServ.searchUsers(termino, 'nombre').subscribe({
       next: (resultados) => {
 
-        this.usuariosFiltrados = resultados.map(usuario => {
+        this.usuarios = resultados.map(usuario => {
           return {
             ...usuario,
             codigo:`USR${String(usuario.id).padStart(3, '0')}`,
             avatar: this.getInitials(usuario.nombre)
           } as Usuario;
         });
-
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error al buscar usuarios:', error);
+        this.loading = false;
       }
     });
-  }
-
-  limpiarBusqueda() {
-    this.searchTerm = '';
-    this.usuariosFiltrados = [...this.usuarios];
   }
 
 }

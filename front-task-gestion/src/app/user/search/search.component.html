@@ -7,37 +7,7 @@
     </div>
 
     <!-- Barra de búsqueda -->
-    <div class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-6">
-      <div class="flex gap-3 items-center">
-        <p-iconfield class="flex-1">
-          <p-inputicon styleClass="pi pi-search" />
-          <input
-            pInputText
-            type="text"
-            [(ngModel)]="searchTerm"
-            (input)="buscarUsuarios()"
-            placeholder="Buscar por nombre o código..."
-            class="w-full"
-          />
-        </p-iconfield>
-        
-        <p-button
-          *ngIf="searchTerm"
-          icon="pi pi-times"
-          [text]="true"
-          severity="secondary"
-          (onClick)="limpiarBusqueda()"
-          pTooltip="Limpiar búsqueda"
-          tooltipPosition="top"
-        />
-      </div>
-
-      <!-- Resultados contador -->
-      <div class="mt-4 text-sm text-gray-600">
-        <span class="font-semibold">{{ usuariosFiltrados.length }}</span> 
-        {{ usuariosFiltrados.length === 1 ? 'usuario encontrado' : 'usuarios encontrados' }}
-      </div>
-    </div>
+    <app-search-bar [cantUser]="usuarios.length" (searchTermEmit)="buscarUsuarios($event)" ></app-search-bar>
 
     <!-- Loading Skeletons -->
     @if (loading) {
@@ -55,14 +25,14 @@
       </div>
     }@else {
       <!-- Sin resultados -->
-      @if (usuariosFiltrados.length === 0) {
+      @if (usuarios.length === 0) {
         <div class="bg-white rounded-lg shadow-md p-12 text-center">
           <i class="pi pi-search text-6xl text-gray-300 mb-4"></i>
           <h3 class="text-xl font-semibold text-gray-600 mb-2">No se encontraron usuarios</h3>
           <p class="text-gray-400">Intenta con otro término de búsqueda</p>
         </div>
       }@else {
-        <app-vscroll-card-search [usuarios]="usuariosFiltrados"></app-vscroll-card-search>
+        <app-vscroll-card-search [usuarios]="usuarios"></app-vscroll-card-search>
       }
     }
     

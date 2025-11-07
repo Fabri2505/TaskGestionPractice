@@ -1,0 +1,24 @@
+/* Personalizar input de búsqueda */
+.p-inputtext {
+    padding: 0.75rem 1rem;
+    padding-left: 2.5rem;
+}
+
+/* Personalizar tooltips */
+.p-tooltip .p-tooltip-text {
+    font-size: 0.875rem;
+}
+
+/* Personalizar botones dentro de cards */
+.p-button {
+    transition: all 0.3s ease;
+}
+
+.p-button:hover {
+    transform: translateY(-2px);
+}
+
+/* Personalizar skeleton */
+.p-skeleton {
+    background-color: #e5e7eb;
+}
