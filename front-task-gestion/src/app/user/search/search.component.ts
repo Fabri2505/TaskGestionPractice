@@ -1,15 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
-import { TagModule } from 'primeng/tag';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { AvatarModule } from 'primeng/avatar';
 import { SkeletonModule } from 'primeng/skeleton';
-import { CardModule } from 'primeng/card';
 import { Usuario } from '../utils/schemas';
 import { SearchService } from '../data-access/search.service';
 import { VscrollCardSearchComponent } from '../ui/vscroll-card-search/vscroll-card-search.component';
@@ -21,14 +13,6 @@ import { SearchBarComponent } from "../ui/search-bar/search-bar.component";
   imports: [
     CommonModule,
     FormsModule,
-    InputTextModule,
-    ButtonModule,
-    CardModule,
-    IconFieldModule,
-    InputIconModule,
-    TooltipModule,
-    TagModule,
-    AvatarModule,
     SkeletonModule,
     VscrollCardSearchComponent,
     SearchBarComponent

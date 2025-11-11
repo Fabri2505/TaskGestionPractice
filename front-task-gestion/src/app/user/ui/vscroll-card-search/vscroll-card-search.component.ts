@@ -1,13 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { ScrollerModule } from "primeng/scroller";
-import { Tag } from "primeng/tag";
-import { Button } from "primeng/button";
+import { TagModule } from "primeng/tag";
+import { ButtonModule } from "primeng/button";
 import { Usuario } from '../../utils/schemas';
 
 @Component({
   selector: 'app-vscroll-card-search',
   standalone: true,
-  imports: [ScrollerModule, Tag, Button],
+  imports: [ScrollerModule, TagModule, ButtonModule],
   templateUrl: './vscroll-card-search.component.html',
   styleUrl: './vscroll-card-search.component.css'
 })

@@ -12,16 +12,18 @@
     <!-- Loading Skeletons -->
     @if (loading) {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div *ngFor="let item of [1,2,3,4,5,6]" class="bg-white rounded-lg shadow-md p-6">
-          <div class="flex items-start gap-4">
-            <p-skeleton shape="circle" size="4rem"></p-skeleton>
-            <div class="flex-1">
-              <p-skeleton width="60%" styleClass="mb-2"></p-skeleton>
-              <p-skeleton width="40%" styleClass="mb-2"></p-skeleton>
-              <p-skeleton width="80%"></p-skeleton>
+        @for (item of [1,2,3,4,5,6]; track $index) {
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-start gap-4">
+              <p-skeleton shape="circle" size="4rem"></p-skeleton>
+              <div class="flex-1">
+                <p-skeleton width="60%" styleClass="mb-2"></p-skeleton>
+                <p-skeleton width="40%" styleClass="mb-2"></p-skeleton>
+                <p-skeleton width="80%"></p-skeleton>
+              </div>
             </div>
           </div>
-        </div>
+        }
       </div>
     }@else {
       <!-- Sin resultados -->
